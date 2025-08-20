@@ -13,6 +13,8 @@ def call_model(prompt):
     response = client.generate(prompt)
     print("AI response:", response)
 
+def generate_to_file(prompt, output_file):
+    print("i")
 
 def main():
     prompt = "egghead on that beat"

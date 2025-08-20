@@ -26,11 +26,11 @@ text_request_template = {
     "context": {}
 }
 
-def save_result(result, output_file):
+def save_input(input, output_file):
     """Append result to output file"""
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     with open(output_file, 'a', encoding='utf-8') as f:
-        f.write(json.dumps(result, ensure_ascii=False) + '\n')
+        f.write(json.dumps(input, ensure_ascii=False) + '\n')
 
 def call_model(query_text, thread_id=None):
     """Call Midea API with the working configuration"""
@@ -88,12 +88,12 @@ def call_model(query_text, thread_id=None):
         print(f"Error calling API: {e}")
         return None
     
-def process_query(query, output_file):
-    save_result(call_model(query), output_file)
+def generate_to_file(query, output_file):
+    save_input(call_model(query), output_file)
     
 def main():
     prompt = "what is a good app that can track my goals in a to do list format"
-    print(call_model(prompt))
+    generate_to_file(call_model(prompt), OUTPUT_FILE)
     
 if __name__ == "__main__":
     main()
