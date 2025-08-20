@@ -88,9 +88,12 @@ def call_model(query_text, thread_id=None):
         print(f"Error calling API: {e}")
         return None
     
+def process_query(query, output_file):
+    save_result(call_model(query), output_file)
+    
 def main():
-    output = call_model("what is a good app that can track my goals in a to do list format")
-    print(output)
+    prompt = "what is a good app that can track my goals in a to do list format"
+    print(call_model(prompt))
     
 if __name__ == "__main__":
     main()

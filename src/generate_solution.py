@@ -1,7 +1,7 @@
 import json
 import os
 
-import src.prompting as prompting
+import models.midea_deepresearch as DR_model
 
 NUM_SOLUTIONS = 10
 RESEARCH_FILE = "research_reports.json"
@@ -45,7 +45,7 @@ def grade_solution(problem: str, solution: str) -> float:
 # processes initial user list of deepresearch queries
 def process_queries(deepresearch_queries: list) -> None:
     for query in deepresearch_queries:
-        prompting.deepresearch_request(query)
+        DR_model.process_query(query)
 
 # main function that generates solution for task
 def main():
@@ -61,7 +61,8 @@ def main():
         else:
             deepresearch_queries.append(query)
     print(f"generating deep research reports now, it will take appromixately {5 * len(deepresearch_queries)} minutes")
-    process_queries(deepresearch_queries)    
+    process_queries(deepresearch_queries)
+    print("Research Queries Done Processing")
     
     # INITIAL SOLUTION GENERATION
     

@@ -2,7 +2,7 @@ import os
 from utils.api import AIClient, scrape_url
 
 # Test the AIClient with Deepseek
-def test_ai_client():
+def call_model(prompt):
     # Set your API key directly
     os.environ["DEEPSEEK_API_KEY"] = "msk-68a74a8195300e232b449a651964efdf65ccc31f2a2e16e8f7994ae781337e01"
     
@@ -10,8 +10,13 @@ def test_ai_client():
     client = AIClient()
     
     # Simple test prompt
-    response = client.generate("Write a one-sentence bedtime story about a unicorn.")
+    response = client.generate(prompt)
     print("AI response:", response)
 
+
+def main():
+    prompt = "egghead on that beat"
+    call_model(prompt)
+
 if __name__ == "__main__":
-    test_ai_client()
+    main()
