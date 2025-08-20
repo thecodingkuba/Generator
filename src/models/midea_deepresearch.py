@@ -89,8 +89,7 @@ def call_model(query_text, thread_id=None):
         return None
     
 def main():
-    prompt = "tell me what the dog doin"
-    output = call_model(prompt)
+    output = call_model("what is a good app that can track my goals in a to do list format")
     print(output)
     
 if __name__ == "__main__":
