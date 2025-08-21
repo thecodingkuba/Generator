@@ -14,30 +14,28 @@ client = OpenAI (
         api_key = DEEPSEEK_API_KEY
     )
  
-class Judge:
-    def __init__(self):
-        pass
-        
-    def call_model(prompt: str):
-        response = client.chat.completions.create(
-        model="/model/Deepseek-V3",
-        messages=[
-            {"role": "user", "content": prompt}
-        ],
-        stream=False,
-    )
-        return response.choices[0].message.content
-
-        
-    def score_solution(task: str, solution: str) -> float:
-        """Returns score (0 to 1) that represents input solution quality to input task."""
-        return random.random()
     
+def call_model(prompt: str):
+    response = client.chat.completions.create(
+    model="/model/Deepseek-V3",
+    messages=[
+        {"role": "user", "content": prompt}
+    ],
+    stream=False,
+)
+    return response.choices[0].message.content
+
+    
+def score_solution(task: str, solution: str) -> float:
+    """Returns score (0 to 1) that represents input solution quality to input task."""
+    return random.random()
+
 
 def main():
     """Test main that calls the model with a simple prompt"""
     prompt = "How do I make sushi?"
-    Judge.call_model(prompt)
+    print(call_model(prompt))
+    print(score_solution)
     
     
 if __name__ == "__main__":
