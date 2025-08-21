@@ -23,5 +23,6 @@ def main():
     prompt = "How do I make sushi?"
     call_model(prompt)
     
+    
 if __name__ == "__main__":
     main()
