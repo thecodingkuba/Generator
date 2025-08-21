@@ -1,3 +1,5 @@
+"""Researcher LLM to do deepresearch tasks."""
+
 import json
 import os
 import sys
@@ -8,16 +10,14 @@ from pathlib import Path
 
 import httpx
 
+# File paths
+OUTPUT_FILE = "data/output/research.jsonl"
 
 # API Setup
 BASE_URL = "https://aimpapi.midea.com/t-aigc/airc-deepresearch-sit/"
 AUTH_TOKEN = "msk-d60011d8a6905bd6b8d72cb77f847d978e387c253266a1dc5beb1c60f8fddf9b"
 ASSISTANT_ID = "xm_deep_search"
 MIP = "liuchen21"
-
-# File paths
-OUTPUT_FILE = "data/output/research_reports.jsonl"
-
 text_request_template = {
     "request_id": f"test_{uuid.uuid4().hex}",
     "assistant_id": "xm_deep_search",
@@ -31,6 +31,15 @@ def save_input(input, output_file):
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     with open(output_file, 'a', encoding='utf-8') as f:
         f.write(json.dumps(input, ensure_ascii=False) + '\n')
+        
+def generate_to_file(query, output_file):
+    """Generates report from query and saves to output file."""
+    save_input(call_model(query), output_file)
+
+def process_queries(deepresearch_queries: list) -> None:
+    """Process user list of deepresearch queries, and send to output file."""
+    for query in deepresearch_queries:
+        generate_to_file(query)
 
 def call_model(query_text, thread_id=None):
     """Call Midea API with the working configuration"""
@@ -88,12 +97,10 @@ def call_model(query_text, thread_id=None):
         print(f"Error calling API: {e}")
         return None
     
-def generate_to_file(query, output_file):
-    save_input(call_model(query), output_file)
-    
 def main():
+    """Test API with simple model call"""
     prompt = "what is a good app that can track my goals in a to do list format"
-    generate_to_file(call_model(prompt), OUTPUT_FILE)
+    print(call_model(prompt))
     
 if __name__ == "__main__":
     main()

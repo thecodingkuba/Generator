@@ -1,5 +1,6 @@
+"""Solution generator LLM to do solution generation tasks"""
+
 import os
-from utils.api import AIClient, scrape_url
 
 def call_model(prompt):
     """Call deepseek API with input prompt and returns the response"""
@@ -8,13 +9,16 @@ def call_model(prompt):
     response = client.generate(prompt)
     return response
 
+
 def create_solution(task):
     print(task)
+
 
 def main():
     """Test main that calls the model with a simple prompt"""
     prompt = "How do I make sushi?"
     print(call_model(prompt))
-    
+
+
 if __name__ == "__main__":
     main()

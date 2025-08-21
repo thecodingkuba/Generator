@@ -1,3 +1,5 @@
+"""Main file that user runs to generate a solution for a given task."""
+
 import json
 import os
 
@@ -9,15 +11,10 @@ from solution_list import SolutionList
 
 NUM_SOLUTIONS = 10
 FILTER_SIZE = 4
-RESEARCH_FILE = "research_reports.json"
-
-
-def process_queries(deepresearch_queries: list) -> None:
-    """Process user list of deepresearch queries, and send to output file."""
-    for query in deepresearch_queries:
-        deepresearcher.generate_to_file(query)
 
 def main():
+    """Entry point where user inputs task and gets generated solution."""
+    
     # ****SET TASK/PROBLEM****
     task = input("enter task/problem here\n")
     Solution.task = task
@@ -30,23 +27,19 @@ def main():
             break
         else:
             deepresearch_queries.append(query)
+            
     print(f"generating deep research reports now, it will take appromixately {5 * len(deepresearch_queries)} minutes")
-    process_queries(deepresearch_queries)
+    deepresearcher.process_queries(deepresearch_queries)
     print("Research Queries Done Processing")
     
     # ****INITIAL SOLUTION GENERATION****
     solution_list = SolutionList()
     for _ in range(NUM_SOLUTIONS):
-        solution_list.add_solution()
+        solution_list.generate_and_add_solution()
+    solution_list.print_list()
     
-    while True:
-        input = input("type the list index if you have found a solution, or 'yes' if you would like to filter more")
-        if input == "yes":
-            solutions_list = solutions_list[0 : len(solutions_list) - FILTER_SIZE]
-            for _ in range FILTER_SIZE:
-                solutions_list.append()
-            
-    
+    # ****SOLUTION REFINEMENT****
+
     
 
 if __name__ == "__main__":

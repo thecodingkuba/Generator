@@ -1,4 +1,8 @@
+"""Judge LLM functions to do scoring tasks."""
+
 import os
+import random
+
 from utils.api import AIClient, scrape_url
 
 
@@ -11,7 +15,7 @@ def call_model(prompt):
     
 def score_solution(task: str, solution: str) -> float:
     """Returns score (0 to 1) that represents input solution quality to input task."""
-    return 0.1
+    return random.random()
     
 
 def main():
