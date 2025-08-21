@@ -14,7 +14,7 @@ def create_solution(task):
 def main():
     """Test main that calls the model with a simple prompt"""
     prompt = "How do I make sushi?"
-    call_model(prompt)
+    print(call_model(prompt))
     
 if __name__ == "__main__":
     main()

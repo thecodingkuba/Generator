@@ -5,13 +5,11 @@ import models.midea_deepresearcher as deepresearcher
 import models.deepseek_judge as judge
 import models.deepseek_generator as generator
 from solution import Solution
+from solution_list import SolutionList
 
 NUM_SOLUTIONS = 10
+FILTER_SIZE = 4
 RESEARCH_FILE = "research_reports.json"
-
-# ordered from best to worst score
-solutions_list = []
-
 
 
 def process_queries(deepresearch_queries: list) -> None:
@@ -20,10 +18,11 @@ def process_queries(deepresearch_queries: list) -> None:
         deepresearcher.generate_to_file(query)
 
 def main():
-    # TASK/PROBLEM
+    # ****SET TASK/PROBLEM****
     task = input("enter task/problem here\n")
+    Solution.task = task
     
-    # RESEARCH QUERIES
+    # ****RESEARCH QUERIES****
     deepresearch_queries = []
     while True:
         query = input('enter a deep research query here, or type "quit" to continue to the next step\n')
@@ -35,10 +34,18 @@ def main():
     process_queries(deepresearch_queries)
     print("Research Queries Done Processing")
     
-    # INITIAL SOLUTION GENERATION
+    # ****INITIAL SOLUTION GENERATION****
+    solution_list = SolutionList()
     for _ in range(NUM_SOLUTIONS):
-        solutions_list.append()
+        solution_list.add_solution()
     
+    while True:
+        input = input("type the list index if you have found a solution, or 'yes' if you would like to filter more")
+        if input == "yes":
+            solutions_list = solutions_list[0 : len(solutions_list) - FILTER_SIZE]
+            for _ in range FILTER_SIZE:
+                solutions_list.append()
+            
     
     
 
