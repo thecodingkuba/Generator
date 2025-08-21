@@ -33,9 +33,9 @@ def score_solution(task: str, solution: str) -> float:
 
 def main():
     """Test main that calls the model with a simple prompt"""
-    prompt = "How do I make sushi?"
-    print(call_model(prompt))
-    print(score_solution)
+    task = "How do I make sushi?"
+    print(call_model(task))
+    print(score_solution(task, "DO NOT MAKE SUSHI, YOU ARE SO LAZY"))
     
     
 if __name__ == "__main__":
