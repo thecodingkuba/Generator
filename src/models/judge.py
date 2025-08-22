@@ -43,7 +43,7 @@ def score_solution(task: str, solution: str) -> float:
 
 
 def build_criteria(criteria_file):
-    """"Builds criteria list into string format to feed into LLM prompt template string."""
+    """Builds criteria list into string format to feed into LLM prompt template string."""
 
     with open(criteria_file, "r") as f:
         criteria_list = json.load(f)
