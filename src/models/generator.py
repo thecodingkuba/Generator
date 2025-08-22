@@ -18,6 +18,8 @@ client = OpenAI (
     
     
 def call_model(prompt: str):
+    """"Calls model with given prompt"""
+    
     response = client.chat.completions.create(
     model="/model/Deepseek-V3",
     messages=[
@@ -30,6 +32,7 @@ def call_model(prompt: str):
 
 def generate_solution(task: str) -> str:
     """Generate solution to input task"""
+    
     prompt = TEMPLATE.format(
         task_prompt = task
         
@@ -39,6 +42,7 @@ def generate_solution(task: str) -> str:
 
 def main():
     """Test main that calls the model with a simple task"""
+    
     task = "I need to make sushi for under $5"
     print(generate_solution(task))
     

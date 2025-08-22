@@ -28,21 +28,25 @@ text_request_template = {
 
 def save_input(input, output_file):
     """Append result to output file"""
+    
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     with open(output_file, 'a', encoding='utf-8') as f:
         f.write(json.dumps(input, ensure_ascii=False) + '\n')
         
 def generate_to_file(query, output_file):
     """Generates report from query and saves to output file."""
+    
     save_input(call_model(query), output_file)
 
 def process_queries(deepresearch_queries: list) -> None:
     """Process user list of deepresearch queries, and send to output file."""
+    
     for query in deepresearch_queries:
         generate_to_file(query)
-
+        
 def call_model(query_text, thread_id=None):
     """Call Midea API with the working configuration"""
+    
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {AUTH_TOKEN}"}
     
     # Use working endpoint
@@ -99,6 +103,7 @@ def call_model(query_text, thread_id=None):
     
 def main():
     """Test API with simple model call"""
+    
     prompt = "what is a good app that can track my goals in a to do list format"
     print(call_model(prompt))
     

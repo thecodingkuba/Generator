@@ -1,18 +1,18 @@
 [
    {
     "criteria": "Relevant",
-    "explanation": "The solution must Directly Address the Problem Statement"
+    "description": "The solution must Directly Address the Problem Statement"
    },
    {
     "criteria": "Practical",
-    "explanation": "The solution must Be Feasible with Current or Near-Term Resources"
+    "description": "The solution must Be Feasible with Current or Near-Term Resources"
    },
    {
     "criteria": "Sensible",
-    "explanation": "The solution must Be Supported by Logical Reasoning or Evidence"
+    "description": "The solution must Be Supported by Logical Reasoning or Evidence"
    },
     {
     "criteria": "Clear",
-    "explanation": "The solution must Be Clear, Specific, and Actionable "
+    "description": "The solution must Be Clear, Specific, and Actionable "
    }
 ]

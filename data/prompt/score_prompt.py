@@ -28,7 +28,10 @@ The criteria list is as follows:
 
 <Instruction>
 **Your Task**
-Score the solution from 0 to 1, considering the given evaluation criteria.
+Score the solution from 0 to 1, considering the given evaluation criteria. The solution is as follows:
+<solution>
+{solution}
+</solution>
 
 Please **strictly** follow the '<output_format>' below. ""Do not include any other unrelated content, introduction, or summary**.
 </Instruction>
