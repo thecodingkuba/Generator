@@ -1,7 +1,7 @@
 import json
 import os
-import models.deepseek_generator as generator
-import models.deepseek_judge as judge
+import models.generator as generator
+import models.judge as judge
         
 OUTPUT_FILE = "data/output/solutions.json"
 

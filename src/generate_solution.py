@@ -3,9 +3,9 @@
 import json
 import os
 
-import models.midea_deepresearcher as deepresearcher
-import models.deepseek_judge as judge
-import models.deepseek_generator as generator
+import models.researcher as researcher
+import models.judge as judge
+import models.generator as generator
 from solution import Solution
 from solution_list import SolutionList
 
@@ -29,7 +29,7 @@ def main():
             deepresearch_queries.append(query)
             
     print(f"generating deep research reports now, it will take appromixately {5 * len(deepresearch_queries)} minutes")
-    deepresearcher.process_queries(deepresearch_queries)
+    researcher.process_queries(deepresearch_queries)
     print("Research Queries Done Processing")
     
     # ****INITIAL SOLUTION GENERATION****
