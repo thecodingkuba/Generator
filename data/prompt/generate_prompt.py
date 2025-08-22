@@ -13,12 +13,6 @@ There is a task, and you need to generate the best solution for it. The task is 
 </task>
 
 **Output Format Requirements**
-Please make sure you **strictly** follow the following '<output_format>' template:
-
-<output_format>
-{"Solution": [full solution here]}
-</output_format>
-
-Now, proceed to generate the best solution you can, and make sure you follow the output format without adding any additional comments or explanation.
+Please output only the solution, with no additional comments or explanation.
 </user_prompt>
 """

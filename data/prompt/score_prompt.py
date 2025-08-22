@@ -9,18 +9,18 @@
 #
 # The LLM is instructed to output a JSON object in the specified format, with no extra comments.
 
-TEMPLATE = """"
+TEMPLATE = """
 <system_role>You are a strict and objective solution evaluation expert, excelling at using specific criteria to thoroughly judge the quality of a solution to a task.</system_role>
 
 <user_prompt>
 **Task Background**
-There is a task, and you need to evaluate a solutin to the given task. The task is as follows:
+There is a task, and you need to evaluate a solution to the given task. The task is as follows:
 <task>
 {task_prompt}
 </task>
 
 **Evaluation Criteria**
-You will need to evaluate the solution based on the following **evaluatoin criteria list**. Each criteria includes an explanation, so understand carefully.
+You will need to evaluate the solution based on the following evaluation criteria list. Each criteria includes an explanation, so understand carefully.
 The criteria list is as follows:
 <criteria_list>
 {criteria_list}
@@ -33,14 +33,7 @@ Score the solution from 0 to 1, considering the given evaluation criteria. The s
 {solution}
 </solution>
 
-Please **strictly** follow the '<output_format>' below. ""Do not include any other unrelated content, introduction, or summary**.
+Please output **only** the score as a single number between 0 and 1. Do not include any other text, explanation, or formatting.
 </Instruction>
-
-<output_format>
-{"Solution Score": [Generated score from 0 to 1]}
-</output_format>
-
-Now, please evaluate the solution based on the given criteria, ensuring you meet all instructions and give your output in the specified '<output_format>' that is JSON parsable, with all characters causing JSON parsing errors escaped.
-
 </user_prompt>
 """

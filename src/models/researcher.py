@@ -33,16 +33,20 @@ def save_input(input, output_file):
     with open(output_file, 'a', encoding='utf-8') as f:
         f.write(json.dumps(input, ensure_ascii=False) + '\n')
         
+        
 def generate_to_file(query, output_file):
     """Generates report from query and saves to output file."""
     
     save_input(call_model(query), output_file)
 
+
 def process_queries(deepresearch_queries: list) -> None:
     """Process user list of deepresearch queries, and send to output file."""
     
-    for query in deepresearch_queries:
-        generate_to_file(query)
+    for index, query in enumerate(deepresearch_queries):
+        generate_to_file(query, OUTPUT_FILE)
+        print(f"Report {index + 1} generated")
+        
         
 def call_model(query_text, thread_id=None):
     """Call Midea API with the working configuration"""

@@ -37,7 +37,7 @@ def score_solution(task: str, solution: str) -> float:
     prompt = TEMPLATE.format(
         task_prompt = task,
         solution = solution,
-        criteria_list_string = build_criteria(CRITERIA_FILE)
+        criteria_list = build_criteria(CRITERIA_FILE)
     )
     return call_model(prompt)
 
@@ -49,7 +49,7 @@ def build_criteria(criteria_file):
         criteria_list = json.load(f)
         criteria_list_string = ""
         for criteria in criteria_list:
-            criteria_list_string += f"criteria: [{criteria["criteria"]}], description: [{criteria["description"]}] \n"
+            criteria_list_string += f"criteria: [{criteria['criteria']}], description: [{criteria['description']}] \n"
         return criteria_list_string
     
     
@@ -57,7 +57,7 @@ def main():
     """Test main that calls the model with a simple prompt"""
     
     task = "How do I make sushi?"
-    solution = "You do not, you lazy pig"
+    solution = "You need cucumbers, rice, and more ingredients. Steam and prepare the rice. Cut the other ingredients. Make it into a roll."
     print(score_solution(task, solution))
     
     

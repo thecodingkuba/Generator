@@ -1,7 +1,7 @@
 import json
 import os
-import models.generator as generator
-import models.judge as judge
+import src.models.generator as generator
+import src.models.judge as judge
         
 OUTPUT_FILE = "data/output/solutions.json"
 
@@ -27,10 +27,10 @@ class Solution:
     def __init__(self, metadata=None):
         Solution.counter += 1
         self.id = Solution.counter
-        self.solution = generator.create_solution(Solution.task)
-        self.score = judge.score_solution(self.task, self.solution)
+        self.solution = generator.generate_solution(Solution.task)
+        self.score = judge.score_solution(Solution.task, self.solution)
         self.rank = None
-        Solution.dump_solution()
+        self.dump_solution()
         
     def dump_solution(self):
         """Dumps solution to solution file."""

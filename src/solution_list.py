@@ -1,5 +1,4 @@
-import solution
-from solution import Solution
+from src.solution import Solution
 
 class SolutionList(list):
     """"Wraps a list to represent a collection of solution objects, ordered by score."""
@@ -16,7 +15,7 @@ class SolutionList(list):
     def print_list(self):
         """Prints out solution list to terminal."""
         rank_counter = 0
-        for index, solution in enumerate(self.solutions):
+        for index, solution in enumerate(self.solution_list):
             rank = index + 1
             print(f"{rank}: ")
             solution.print_solution()
