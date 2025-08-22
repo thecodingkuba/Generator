@@ -3,7 +3,7 @@
 # Variables:
 #   {task_prompt} - The task or problem statement for which a solution should be generated.
 
-generate_prompt = """
+TEMPLATE = """
 <system_role>You are a solution generator expert, excelling at generating profitable and optimal solutions for an input task. Keep the solution around a paragraph in length.</system_role>
 
 <user_prompt>

@@ -7,6 +7,8 @@ import random
 import httpx
 from openai import OpenAI
 
+from data.prompt.score_prompt import TEMPLATE
+
 DEEPSEEK_API_KEY = "msk-68a74a8195300e232b449a651964efdf65ccc31f2a2e16e8f7994ae781337e01"
 DEEPSEEK_BASE_URL = "https://aimpapi.midea.com/t-aigc/aimp-deepseek-v3-0324/v1"
 client = OpenAI (
@@ -34,7 +36,10 @@ def score_solution(task: str, solution: str) -> float:
 def main():
     """Test main that calls the model with a simple prompt"""
     task = "How do I make sushi?"
-    print(call_model(task))
+    prompt = TEMPLATE.format(
+        task_prompt = task
+        criteria_list = CRITERIA_LIST
+    )
     print(score_solution(task, "DO NOT MAKE SUSHI, YOU ARE SO LAZY"))
     
     

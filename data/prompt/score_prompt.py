@@ -9,7 +9,7 @@
 #
 # The LLM is instructed to output a JSON object in the specified format, with no extra comments.
 
-score_prompt = """"
+TEMPLATE = """"
 <system_role>You are a strict and objective solution evaluation expert, excelling at using specific criteria to thoroughly judge the quality of a solution to a task.</system_role>
 
 <user_prompt>

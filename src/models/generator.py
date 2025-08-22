@@ -7,6 +7,8 @@ import random
 import httpx
 from openai import OpenAI
 
+from data.prompt.generate_prompt import TEMPLATE
+
 DEEPSEEK_API_KEY = "msk-68a74a8195300e232b449a651964efdf65ccc31f2a2e16e8f7994ae781337e01"
 DEEPSEEK_BASE_URL = "https://aimpapi.midea.com/t-aigc/aimp-deepseek-v3-0324/v1"
 client = OpenAI (
@@ -28,8 +30,11 @@ def call_model(prompt: str):
 
 def generate_solution(task: str) -> str:
     """Generate solution to input task"""
-    prompt = f"The task is to {task}, give a solution"
-    return Generator.call_model(prompt)
+    prompt = TEMPLATE.format(
+        task_prompt = task
+        
+    )
+    return call_model(prompt)
 
 
 def main():
