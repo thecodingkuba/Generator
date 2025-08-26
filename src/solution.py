@@ -3,7 +3,7 @@ import os
 import src.models.generator as generator
 import src.models.judge as judge
         
-OUTPUT_FILE = "data/output/solutions.json"
+OUTPUT_FILE = "data/output/solutions.jsonl"
 
 def save_input(input, output_file):
     """Append result to output file"""
@@ -24,10 +24,10 @@ class Solution:
     """
     task = None
     counter = 0
-    def __init__(self, metadata=None):
+    def __init__(self, previous_solutions=None, metadata=None):
         Solution.counter += 1
         self.id = Solution.counter
-        self.solution = generator.generate_solution(Solution.task)
+        self.solution = generator.generate_solution(Solution.task, previous_solutions)
         self.score = judge.score_solution(Solution.task, self.solution)
         self.rank = None
         self.dump_solution()

@@ -8,10 +8,7 @@ class SolutionList(list):
         self.solution_list = []
         self.dead_list = []
         self.good_list = []
-        
-    # def filter_list(self, filter_size: int):
-    #     for _ in range(filter_size):
-    #         pass
+        self.previous_solutions = []
         
     def print_list(self):
         """Prints out solution list to terminal."""
@@ -50,11 +47,12 @@ class SolutionList(list):
 
     def generate_and_add_solution(self):
         """Generates a new solution and adds it to the solution list."""
-        new_solution = Solution()
+        new_solution = Solution(previous_solutions=self.previous_solutions)
         self.add_solution(new_solution)
+        self.previous_solutions.append(new_solution)
         print("Solution Generated")
         
     def add_several_solutions(self, num_solutions: int):
         """Generates and adds given number of solutions to solution list."""
         for _ in range(num_solutions):
-            self.generate_and_add_solution(self)
+            self.generate_and_add_solution()

@@ -9,8 +9,8 @@ import src.models.generator as generator
 from src.solution import Solution
 from src.solution_list import SolutionList
 
-NUM_SOLUTIONS = 4
-FILTER_SIZE = 2
+NUM_SOLUTIONS = 2
+FILTER_SIZE = 1
 
 def main():
     """Entry point where user inputs task and gets generated solution."""
@@ -42,36 +42,45 @@ def main():
     solutions.print_list()
     
     # ****SOLUTION REFINEMENT****
-    print("""
+    
+    while True:
+        print("""
+              
           Choose from the following:
-          1. Mark solutions as bad (automatically removes them)
-          2. Mark solutions as good (to generate better soultions)
+          1. Mark solution(s) as bad (automatically removes them)
+          2. Mark solution(s) as good (to generate better soultions)
           3. Generate more solutions
           4. Select solution to forward
+          5. Print solution list
           
-          Please input the number to select a route
           """)
-    decision = input()
-    match decision:
-        case 1:
-            while True:
-                print("please input the rank of the solution(s) to mark bad, or type 'quit' to quit")
-                if(input == "quit"):
-                    break
-                solutions.kill_solution(input-1)
-        case 2:
-            while True:
-                print("please input the rank of the solution(s) to mark good, or type 'quit' to quit")
-                input = input()
-                if(input == "quit"):
-                    break
-                solutions.mark_good(input-1)
-        case 3:
-            print("please input how many more solutions to generate.")
-            solutions.add_several_solutions(int(input()))
-        case 4:
-            print("please input what rank solution you would like to forward.")
-            print(solutions.solution_list(int(input())))
+        decision = input("Please input the number to select a route\n")
+        match int(decision):
+            case 1:
+                while True:
+                    solutions.print_list()
+                    user_input = input("please input the rank of the solution to mark bad, or type 'quit' to quit\n")
+                    if(user_input == "quit"):
+                        break
+                    solutions.kill_solution(int(user_input) - 1)
+            case 2:
+                while True:
+                    solutions.print_list()
+                    user_input = input("please input the rank of the solution to mark good, or type 'quit' to quit\n")
+                    if(user_input == "quit"):
+                        break
+                    solutions.mark_good(int(user_input) - 1)
+            case 3:
+                solutions.add_several_solutions(int(input("please input how many more solutions to generate\n")))
+            case 4:
+                solutions.print_list()
+                index = (int(input("please input what rank solution you would like to forward\n"))) - 1
+                print("You have found your solution:\n\n")
+                solutions.solution_list[index].print_solution()
+                break
+            case 5:
+                solutions.print_list()
+            
 
 if __name__ == "__main__":
     main()

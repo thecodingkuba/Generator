@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Generate Solution",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/generate_solution.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
