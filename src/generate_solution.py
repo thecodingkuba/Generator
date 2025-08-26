@@ -32,20 +32,46 @@ def main():
         researcher.process_queries(deepresearch_queries)
         print("Research Queries Done Processing, now generating solutions...")
     else:
-        print("No queries to process, now generating solutions...")
+        print(f"No queries to process, now generating {NUM_SOLUTIONS} solutions...")
         
     # ****INITIAL SOLUTION GENERATION****
-    solution_list = SolutionList()
-    for _ in range(NUM_SOLUTIONS):
-        solution_list.generate_and_add_solution()
-        print(f"Solution generated!")
+    solutions = SolutionList()
+    solutions.add_several_solutions(NUM_SOLUTIONS)
     print("")
     print("Solution list will print now:")
-    solution_list.print_list()
+    solutions.print_list()
     
     # ****SOLUTION REFINEMENT****
-
-    
+    print("""
+          Choose from the following:
+          1. Mark solutions as bad (automatically removes them)
+          2. Mark solutions as good (to generate better soultions)
+          3. Generate more solutions
+          4. Select solution to forward
+          
+          Please input the number to select a route
+          """)
+    decision = input()
+    match decision:
+        case 1:
+            while True:
+                print("please input the rank of the solution(s) to mark bad, or type 'quit' to quit")
+                if(input == "quit"):
+                    break
+                solutions.kill_solution(input-1)
+        case 2:
+            while True:
+                print("please input the rank of the solution(s) to mark good, or type 'quit' to quit")
+                input = input()
+                if(input == "quit"):
+                    break
+                solutions.mark_good(input-1)
+        case 3:
+            print("please input how many more solutions to generate.")
+            solutions.add_several_solutions(int(input()))
+        case 4:
+            print("please input what rank solution you would like to forward.")
+            print(solutions.solution_list(int(input())))
 
 if __name__ == "__main__":
     main()

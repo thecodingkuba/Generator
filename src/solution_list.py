@@ -6,7 +6,8 @@ class SolutionList(list):
     def __init__(self):
         """Initializes solution list and dead solution list."""
         self.solution_list = []
-        self.dead_solution_list = []
+        self.dead_list = []
+        self.good_list = []
         
     # def filter_list(self, filter_size: int):
     #     for _ in range(filter_size):
@@ -19,14 +20,18 @@ class SolutionList(list):
             rank = index + 1
             print(f"{rank}: ")
             solution.print_solution()
-            
-    def generate_and_add_solution(self):
-        """Generates a new solution and adds it to the solution list."""
-        new_solution = Solution()
-        self.add_solution(new_solution)
     
+    def kill_solution(self, solution_index: int):
+        """Given index, removes solution from main list and puts into dead list."""
+        self.dead_list.append(self.solution_list[solution_index])
+        self.solution_list.pop(solution_index)
+        
+    def mark_good(self, solution_index: int):
+        """Given index, adds solution to good list (keeps in main list)"""
+        self.good_list.append(self.solution_list[solution_index])
+        
     def add_solution(self, solution: Solution):
-        """"Inserts a given solution to the solution list in sorted order. Returns index of new solution."""
+        """"Inserts a given solution to the solution list in reverse sorted order. Returns index of new solution."""
         target = solution.score
         left_bound = 0
         right_bound = len(self.solution_list)
@@ -36,9 +41,20 @@ class SolutionList(list):
             if (target == curr):
                 self.solution_list.insert(middle, solution)
                 return middle
-            elif target > curr:
+            elif target < curr:
                 left_bound = middle + 1
             else:
                 right_bound = middle
         self.solution_list.insert(left_bound, solution)
         return left_bound
+
+    def generate_and_add_solution(self):
+        """Generates a new solution and adds it to the solution list."""
+        new_solution = Solution()
+        self.add_solution(new_solution)
+        print("Solution Generated")
+        
+    def add_several_solutions(self, num_solutions: int):
+        """Generates and adds given number of solutions to solution list."""
+        for _ in range(num_solutions):
+            self.generate_and_add_solution(self)

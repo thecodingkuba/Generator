@@ -17,16 +17,20 @@ client = OpenAI (
     )
     
     
-def call_model(prompt: str):
+def call_model(prompt: str, temperature=0.7, top_p=0.9, frequency_penalty=0.5, presence_penalty=0.3):
     """"Calls model with given prompt"""
     
     response = client.chat.completions.create(
-    model="/model/Deepseek-V3",
-    messages=[
-        {"role": "user", "content": prompt}
-    ],
-    stream=False,
-)
+        model="/model/Deepseek-V3",
+        messages=[
+            {"role": "user", "content": prompt}
+        ],
+        temperature=temperature,
+        top_p=top_p,
+        frequency_penalty=frequency_penalty,
+        presence_penalty=presence_penalty,
+        stream=False,
+    )
     return response.choices[0].message.content
 
 
@@ -35,9 +39,21 @@ def generate_solution(task: str) -> str:
     
     prompt = TEMPLATE.format(
         task_prompt = task
-        
     )
-    return call_model(prompt)
+    
+    # Use random parameters for diversity
+    temperature = random.uniform(0.7, 1.1)  # Higher temperature for more diversity
+    top_p = random.uniform(0.85, 0.98)      # Higher top_p for broader token selection
+    freq_penalty = random.uniform(0.3, 0.7) # Reduce repetition of phrases
+    pres_penalty = random.uniform(0.2, 0.5) # Encourage new topics
+    
+    return call_model(
+        prompt,
+        temperature=temperature,
+        top_p=top_p, 
+        frequency_penalty=freq_penalty,
+        presence_penalty=pres_penalty
+    )
 
 
 def main():
