@@ -1,5 +1,4 @@
 """Solution generator LLM to do solution generation tasks"""
-
 import os
 import json
 import random
@@ -7,8 +6,9 @@ import random
 import httpx
 from openai import OpenAI
 
-from data.prompt.generate_prompt import TEMPLATE
-from data.prompt.generate_prompt import VERSION_TEMPLATE
+from data.prompt.generate_prompt import TEMPLATE, RESEARCH_TEMPLATE, PREVIOUS_SOLUTIONS_TEMPLATE, VERSION_TEMPLATE
+from src.models import researcher
+
 
 DEEPSEEK_API_KEY = "msk-68a74a8195300e232b449a651964efdf65ccc31f2a2e16e8f7994ae781337e01"
 DEEPSEEK_BASE_URL = "https://aimpapi.midea.com/t-aigc/aimp-deepseek-v3-0324/v1"
@@ -33,19 +33,35 @@ def call_model(prompt: str, temperature=0.7, top_p=0.9, frequency_penalty=0.5, p
     )
     return response.choices[0].message.content
 
-def generate_previous_solutions_string(previous_solutions: list) -> str:
+
+def generate_previous_solutions_section(previous_solutions: list) -> str:
     """"Generates a context string given list of previous solutions."""
-    text = ""
+    previous_solution_string = ""
     for index, solution in enumerate(previous_solutions):
-        text += f"Solution {index + 1}: {solution.solution}\n"
-    return text
+        previous_solution_string += f"Solution {index + 1}: {solution.solution}\n"
+    section = PREVIOUS_SOLUTIONS_TEMPLATE.format(
+        previous_solution_string=previous_solution_string
+    )
+    return section
+
+
+def generate_research_section(research_context_string: str) -> str:
+    """Generates research section context string for LLM prompt."""
+    research_string = researcher.generate_research_string()
+    section = RESEARCH_TEMPLATE.format(
+        research_string=research_string
+    )
+    return section
+
 
 def generate_solution(task: str, previous_solutions=None) -> str:
     """Generate solution to input task"""
-    previous_solutions_string = generate_previous_solutions_string(previous_solutions)
+    previous_solutions_section = generate_previous_solutions_section(previous_solutions)
+    research_section = generate_research_section(researcher.generate_research_string())
     prompt = TEMPLATE.format(
         task_prompt=task,
-        previous_solutions=previous_solutions_string
+        research_section=research_section,
+        previous_solutions_section=previous_solutions_section,
     )
     
     # Use random parameters for diversity
@@ -61,6 +77,7 @@ def generate_solution(task: str, previous_solutions=None) -> str:
         frequency_penalty=freq_penalty,
         presence_penalty=pres_penalty
     )
+    
     
 def generate_versions(task: str, root_solution: str, num_versions=5) -> list:
     """Takes a core solution and expands it to similar solutions"""

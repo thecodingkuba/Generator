@@ -13,14 +13,26 @@ There is a task, and you need to generate an original and unique solution for it
 "{task_prompt}"
 </task>
 
-Make sure it is distinct from the following previously generated solutions:
-<previous_solutions>
-"{previous_solutions}"
-</previous_solutions>
+{research_section}
+{previous_solutions_section}
 
 **Output Format Requirements**
 Please output only the solution, with no additional comments or explanation.
 </user_prompt>
+"""
+
+RESEARCH_TEMPLATE = """
+Here is some research context that should guide your solution:
+<research_context>
+{research_string}
+</research_context>
+"""
+
+PREVIOUS_SOLUTIONS_TEMPLATE = """
+Make sure it is distinct from the following previously generated solutions:
+<previous_solutions>
+{previous_solution_string}
+</previous_solutions>
 """
 
 VERSION_TEMPLATE = """

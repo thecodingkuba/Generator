@@ -1,5 +1,4 @@
 """Researcher LLM to do deepresearch tasks."""
-
 import json
 import os
 import sys
@@ -9,6 +8,7 @@ from datetime import datetime
 from pathlib import Path
 
 import httpx
+
 
 # File paths
 OUTPUT_FILE = "data/output/research.jsonl"
@@ -24,33 +24,10 @@ text_request_template = {
     "content": "ask something!",
     "metadata": {},
     "context": {}
-}
-
-def save_input(input, output_file):
-    """Append result to output file"""
-    
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    with open(output_file, 'a', encoding='utf-8') as f:
-        f.write(json.dumps(input, ensure_ascii=False) + '\n')
-        
-        
-def generate_to_file(query, output_file):
-    """Generates report from query and saves to output file."""
-    
-    save_input(call_model(query), output_file)
-
-
-def process_queries(deepresearch_queries: list) -> None:
-    """Process user list of deepresearch queries, and send to output file."""
-    
-    for index, query in enumerate(deepresearch_queries):
-        generate_to_file(query, OUTPUT_FILE)
-        print(f"Report {index + 1} generated")
-        
+} 
         
 def call_model(query_text, thread_id=None):
     """Call Midea API with the working configuration"""
-    
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {AUTH_TOKEN}"}
     
     # Use working endpoint
@@ -105,9 +82,41 @@ def call_model(query_text, thread_id=None):
         print(f"Error calling API: {e}")
         return None
     
+    
+def save_input(query, result, output_file):
+    """Append result to output file"""
+    report_data = {
+        "query": query,
+        "report": result
+    }
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    with open(output_file, 'a', encoding='utf-8') as f:
+        f.write(json.dumps(report_data, ensure_ascii=False) + '\n')
+
+        
+def generate_to_file(query, output_file):
+    """Generates report from query and saves to output file."""
+    save_input(query, call_model(query), output_file)
+
+
+def process_queries(deepresearch_queries: list) -> None:
+    """Process user list of deepresearch queries, and send to output file."""
+    for index, query in enumerate(deepresearch_queries):
+        generate_to_file(query, OUTPUT_FILE)
+        print(f"Report {index + 1} generated")
+
+
+def generate_research_string(output_file=OUTPUT_FILE) -> str:
+    """"Builds context for LLM prompt by using output file as reference."""
+    result_string = ""
+    with open(output_file, "r", encoding="utf-8") as f:
+        for index, line in enumerate(f):
+            report = json.loads(line)
+            result_string += f"Query {index + 1}: {report['query']}\nResult: {report['report']}\n\n"
+    return result_string
+    
 def main():
     """Test API with simple model call"""
-    
     prompt = "what is a good app that can track my goals in a to do list format"
     print(call_model(prompt))
     

@@ -1,7 +1,9 @@
+"""Solution class contains one solution and functions to manipulate that solution."""
 import json
 import os
 import src.models.generator as generator
 import src.models.judge as judge
+        
         
 OUTPUT_FILE = "data/output/solutions.jsonl"
 
@@ -10,6 +12,7 @@ def save_input(input, output_file):
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     with open(output_file, 'a', encoding='utf-8') as f:
         f.write(json.dumps(input, ensure_ascii=False) + '\n')
+        
         
 class Solution:
     """

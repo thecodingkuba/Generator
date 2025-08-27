@@ -1,8 +1,9 @@
+"""SolutionList class contains one list of solutions and functions to manipulate that list."""
 from src.solution import Solution
+
 
 class SolutionList(list):
     """"Wraps a list to represent a collection of solution objects, ordered by score."""
-    
     def __init__(self):
         """Initializes solution list and dead solution list."""
         self.solution_list = []
@@ -15,7 +16,7 @@ class SolutionList(list):
         rank_counter = 0
         for index, solution in enumerate(self.solution_list):
             rank = index + 1
-            print(f"{rank}: ")
+            print(f"Rank {rank}: ")
             solution.print_solution()
     
     def kill_solution(self, solution_index: int):
