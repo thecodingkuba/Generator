@@ -1,0 +1,4 @@
+# Core dependencies for making API calls
+openai
+httpx
+python-dotenv
