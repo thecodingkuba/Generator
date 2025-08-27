@@ -33,11 +33,11 @@ def call_model(prompt: str, temperature=0.7, top_p=0.9, frequency_penalty=0.5, p
     )
     return response.choices[0].message.content
 
-def generate_previous_solutions_string(previous_solutions: list):
+def generate_previous_solutions_string(previous_solutions: list) -> str:
     """"Generates a context string given list of previous solutions."""
     text = ""
     for index, solution in enumerate(previous_solutions):
-        text += f"Solution {index + 1}: solution\n"
+        text += f"Solution {index + 1}: {solution.solution}\n"
     return text
 
 def generate_solution(task: str, previous_solutions=None) -> str:
