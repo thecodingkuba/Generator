@@ -6,7 +6,7 @@ import random
 import httpx
 from openai import OpenAI
 
-from data.prompt.generate_prompt import TEMPLATE, RESEARCH_TEMPLATE, PREVIOUS_SOLUTIONS_TEMPLATE, VERSION_TEMPLATE
+from data.prompt.generate_prompt import TEMPLATE, RESEARCH_TEMPLATE, PREVIOUS_SOLUTIONS_TEMPLATE, VERSION_TEMPLATE, CRITERIA_TEMPLATE
 from src.models import researcher
 
 
@@ -36,32 +36,57 @@ def call_model(prompt: str, temperature=0.7, top_p=0.9, frequency_penalty=0.5, p
 
 def generate_previous_solutions_section(previous_solutions: list) -> str:
     """"Generates a context string given list of previous solutions."""
-    previous_solution_string = ""
-    for index, solution in enumerate(previous_solutions):
-        previous_solution_string += f"Solution {index + 1}: {solution.solution}\n"
+    if not previous_solutions:
+        return ""
+    
+    lines = [
+        f"Solution {index + 1}: {solution.solution}"
+        for index, solution in enumerate(previous_solutions)
+    ]
+    previous_solution_string = "\n".join(lines)
     section = PREVIOUS_SOLUTIONS_TEMPLATE.format(
         previous_solution_string=previous_solution_string
     )
     return section
 
 
-def generate_research_section(research_context_string: str) -> str:
+def generate_research_section() -> str:
     """Generates research section context string for LLM prompt."""
     research_string = researcher.generate_research_string()
+    if not research_string:
+        return ""
+    
     section = RESEARCH_TEMPLATE.format(
         research_string=research_string
     )
     return section
 
 
-def generate_solution(task: str, previous_solutions=None) -> str:
+def generate_criteria_section(criteria_list: list) -> str:
+    """Generatees criteria section string for LLM prompt"""
+    if not criteria_list:
+        return ""
+    
+    lines = [
+    f"Criteria {index + 1}: {criteria}"
+    for index, criteria in enumerate(criteria_list)
+   ]
+    criteria_string = "\n".join(lines)
+    section = CRITERIA_TEMPLATE.format(
+        criteria_string=criteria_string
+    )
+    return section
+
+def generate_solution(task: str, criteria_list, previous_solutions=None) -> str:
     """Generate solution to input task"""
+    research_section = generate_research_section()
     previous_solutions_section = generate_previous_solutions_section(previous_solutions)
-    research_section = generate_research_section(researcher.generate_research_string())
+    criteria_section = generate_criteria_section(criteria_list)
     prompt = TEMPLATE.format(
         task_prompt=task,
         research_section=research_section,
         previous_solutions_section=previous_solutions_section,
+        criteria_section=criteria_section
     )
     
     # Use random parameters for diversity

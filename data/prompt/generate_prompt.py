@@ -4,6 +4,7 @@
 #   {task_prompt} - The task or problem statement for which a solution should be generated.
 #   {previous_solutions} - Previously generated solutions to avoid duplicating.
 
+
 TEMPLATE = """
 <system_role>You are a solution generator expert, excelling at generating profitable and optimal solutions for an input task. Keep the solution around a paragraph in length.</system_role>
 
@@ -15,11 +16,13 @@ There is a task, and you need to generate an original and unique solution for it
 
 {research_section}
 {previous_solutions_section}
+{criteria_section}
 
 **Output Format Requirements**
 Please output only the solution, with no additional comments or explanation.
 </user_prompt>
 """
+
 
 RESEARCH_TEMPLATE = """
 Here is some research context that should guide your solution:
@@ -34,6 +37,15 @@ Make sure it is distinct from the following previously generated solutions:
 {previous_solution_string}
 </previous_solutions>
 """
+
+
+CRITERIA_TEMPLATE = """
+The user has given some criteria you should follow. Here it is:
+<user_criteria>
+{criteria_string}
+</user_criteria>
+"""
+
 
 VERSION_TEMPLATE = """
 <system_role>You are an expert at giving versions of a solution. Given a solution to a task, give another version to the solution.</system_role>

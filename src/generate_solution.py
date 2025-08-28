@@ -43,45 +43,60 @@ def main():
     # ****SOLUTION REFINEMENT****
     
     while True:
+        # TODO: FOR SURE Make it so a bad input does not crash everything
         print("""
-          Choose from the following:
+        Choose from the following:
           1. Mark solution(s) as bad (automatically removes them)
           2. Mark solution(s) as good (to generate better soultions)
           3. Generate more solutions
           4. Select solution to forward (finish program)
           5. Print solution list
+          6. Input new criteria for solution.
           """)
         decision = input("Please input the number to select a route\n")
-        match int(decision):
-            case 1:
-                while True:
+        try:
+            match int(decision):
+                case 1:
+                    while True:
+                        solutions.print_list()
+                        print("")
+                        user_input = input("please input the rank of the solution to mark bad, or type 'quit' to quit\n")
+                        if(user_input == "quit"):
+                            break
+                        solutions.kill_solution(int(user_input) - 1)
+                case 2:
+                    while True:
+                        solutions.print_list()
+                        print("")
+                        user_input = input("please input the rank of the solution to mark good, or type 'quit' to quit\n")
+                        if(user_input == "quit"):
+                            break
+                        solutions.mark_good(int(user_input) - 1)
+                case 3:
+                    # TODO: ADD MORE TRY CATCH SHIDS FOR CASES SUCH AS THESE
+                    solutions.add_several_solutions(int(input("please input how many more solutions to generate\n")))
+                case 4:
                     solutions.print_list()
                     print("")
-                    user_input = input("please input the rank of the solution to mark bad, or type 'quit' to quit\n")
-                    if(user_input == "quit"):
-                        break
-                    solutions.kill_solution(int(user_input) - 1)
-            case 2:
-                while True:
+                    index = (int(input("please input what rank solution you would like to forward\n"))) - 1
+                    print("\nYou have found your solution:\n")
+                    solutions.solution_list[index].print_solution()
+                    break
+                case 5:
                     solutions.print_list()
-                    print("")
-                    user_input = input("please input the rank of the solution to mark good, or type 'quit' to quit\n")
-                    if(user_input == "quit"):
-                        break
-                    solutions.mark_good(int(user_input) - 1)
-            case 3:
-                solutions.add_several_solutions(int(input("please input how many more solutions to generate\n")))
-            case 4:
-                solutions.print_list()
-                print("")
-                index = (int(input("please input what rank solution you would like to forward\n"))) - 1
-                print("\nYou have found your solution:\n")
-                solutions.solution_list[index].print_solution()
-                break
-            case 5:
-                solutions.print_list()
-            
-
+                case 6:
+                    while True:
+                        user_input = input("please write your criteria, or type 'quit' to quit:\n")
+                        if(user_input == "quit"):
+                            break
+                        Solution.add_criteria(user_input)
+                case _:
+                    print(f"\nInvalid choice. '{decision}' is not a valid option.")
+        except:
+            print(f"\nInvalid input. Please enter a valid number.")
+            continue
+        
+        
 if __name__ == "__main__":
     main()
 

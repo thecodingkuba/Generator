@@ -2,14 +2,14 @@
 from src.solution import Solution
 
 
-class SolutionList(list):
+class SolutionList():
     """"Wraps a list to represent a collection of solution objects, ordered by score."""
     def __init__(self):
         """Initializes solution list and dead solution list."""
         self.solution_list = []
         self.dead_list = []
         self.good_list = []
-        self.previous_solutions = []
+        self.previous_solutions = []        
         
     def print_list(self):
         """Prints out solution list to terminal."""
@@ -18,6 +18,7 @@ class SolutionList(list):
             rank = index + 1
             print(f"Rank {rank}: ")
             solution.print_solution()
+            print("\n")
     
     def kill_solution(self, solution_index: int):
         """Given index, removes solution from main list and puts into dead list."""
@@ -52,8 +53,9 @@ class SolutionList(list):
         self.add_solution(new_solution)
         self.previous_solutions.append(new_solution)
         print("Solution Generated")
-        
+              
     def add_several_solutions(self, num_solutions: int):
         """Generates and adds given number of solutions to solution list."""
+        print(f"Generating {num_solutions} solutions...")
         for _ in range(num_solutions):
             self.generate_and_add_solution()

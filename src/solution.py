@@ -7,12 +7,13 @@ import src.models.judge as judge
         
 OUTPUT_FILE = "data/output/solutions.jsonl"
 
+
 def save_input(input, output_file):
     """Append result to output file"""
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     with open(output_file, 'a', encoding='utf-8') as f:
-        f.write(json.dumps(input, ensure_ascii=False) + '\n')
-        
+        f.write(json.dumps(input, ensure_ascii=False) + '\n')     
+      
         
 class Solution:
     """
@@ -27,13 +28,16 @@ class Solution:
     """
     task = None
     counter = 0
+    # TODO: FOR SURE Move criteria list to solution list class!!
+    criteria_list = []
     def __init__(self, previous_solutions=None, metadata=None):
+        # TODO: FOR SURE Move counter to solution list class!!
         Solution.counter += 1
         self.id = Solution.counter
-        self.solution = generator.generate_solution(Solution.task, previous_solutions)
+        self.solution = generator.generate_solution(Solution.task, Solution.criteria_list, previous_solutions)
         self.score = judge.score_solution(Solution.task, self.solution)
         self.rank = None
-        self.dump_solution()
+        self.dump_solution()     
         
     def dump_solution(self):
         """Dumps solution to solution file."""
@@ -52,7 +56,14 @@ class Solution:
             "solution": self.solution
         }
         print(data)
-        
+              
     def find_rank(self, solution_list):
         """Return the 1-based rank of solution."""
         return solution_list.index(self) + 1      
+    
+    @classmethod
+    def add_criteria(cls, criteria: str):
+        """Adds crtieria to criteria list"""
+        cls.criteria_list.append(criteria)
+        print("Criteria added")
+        
