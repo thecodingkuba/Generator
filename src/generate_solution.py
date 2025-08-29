@@ -9,14 +9,15 @@ from src.solution import Solution
 from src.solution_list import SolutionList
 
 
-NUM_SOLUTIONS = 2
+NUM_SOLUTIONS = 0
 
 
 def main():
     """Entry point where user inputs task and gets generated solution."""
     # ****SET TASK/PROBLEM****
+    solutions = SolutionList()
     task = input("enter task/problem here\n")
-    Solution.task = task
+    solutions.task = task
     
     # ****RESEARCH QUERIES****
     deepresearch_queries = []
@@ -34,7 +35,6 @@ def main():
         print(f"No queries to process, now generating {NUM_SOLUTIONS} solutions...")
         
     # ****INITIAL SOLUTION GENERATION****
-    solutions = SolutionList()
     solutions.add_several_solutions(NUM_SOLUTIONS)
     print("")
     print("Solution list will print now:")
@@ -63,38 +63,55 @@ def main():
                         user_input = input("please input the rank of the solution to mark bad, or type 'quit' to quit\n")
                         if(user_input == "quit"):
                             break
-                        solutions.kill_solution(int(user_input) - 1)
+                        try:
+                            solutions.kill_solution(int(user_input) - 1)
+                        except:
+                            print("\nERROR: This is not a valid rank to mark as bad.")
                 case 2:
                     while True:
                         solutions.print_list()
                         print("")
-                        user_input = input("please input the rank of the solution to mark good, or type 'quit' to quit\n")
+                        user_input = input("Please input the rank of the solution to mark good, or type 'quit' to quit:\n")
                         if(user_input == "quit"):
                             break
-                        solutions.mark_good(int(user_input) - 1)
+                        try:
+                            solutions.mark_good(int(user_input) - 1)
+                        except (ValueError, IndexError):
+                            print("\nERROR: This is not a valid rank to mark as good.")
                 case 3:
-                    # TODO: ADD MORE TRY CATCH SHIDS FOR CASES SUCH AS THESE
-                    solutions.add_several_solutions(int(input("please input how many more solutions to generate\n")))
+                    try:
+                        num_add = int(input("Please input how many solutions to generate\n"))
+                        solutions.add_several_solutions(num_add)
+                    except ValueError:
+                        print("\nERROR: This is not a valid number")
                 case 4:
-                    solutions.print_list()
-                    print("")
-                    index = (int(input("please input what rank solution you would like to forward\n"))) - 1
-                    print("\nYou have found your solution:\n")
-                    solutions.solution_list[index].print_solution()
-                    break
+                    try:
+                        solutions.print_list()
+                        print("")
+                        index = (int(input("Please input what rank solution you would like to forward\n"))) - 1
+                        
+                        solution = solutions.solution_list[index]
+                       
+                        print("\nYou have found your solution:\n")
+                        solution.print_solution()
+                        break
+                    except (ValueError, IndexError):
+                        print("\nERROR: Not a valid rank.")
                 case 5:
                     solutions.print_list()
                 case 6:
                     while True:
-                        user_input = input("please write your criteria, or type 'quit' to quit:\n")
+                        user_input = input("\nPlease enter your criteria, or type 'quit' to quit:\n")
                         if(user_input == "quit"):
                             break
-                        Solution.add_criteria(user_input)
+                        solutions.add_criteria(user_input)
                 case _:
-                    print(f"\nInvalid choice. '{decision}' is not a valid option.")
-        except:
-            print(f"\nInvalid input. Please enter a valid number.")
+                    print(f"\nERROR: Invalid number. '{decision}' is not a listed option.")
+        except ValueError:
+            print(f"\nERROR: Invalid input. Please enter a valid number.")
             continue
+        except IndexError:
+            print(f"\nERROR: Invalid input. Please enter a number within range.")
         
         
 if __name__ == "__main__":

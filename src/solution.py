@@ -26,17 +26,14 @@ class Solution:
         score (float, optional): The score or rating for the solution.
         metadata (dict, optional): Additional metadata about the solution.
     """
-    task = None
-    counter = 0
-    # TODO: FOR SURE Move criteria list to solution list class!!
-    criteria_list = []
-    def __init__(self, previous_solutions=None, metadata=None):
-        # TODO: FOR SURE Move counter to solution list class!!
-        Solution.counter += 1
-        self.id = Solution.counter
-        self.solution = generator.generate_solution(Solution.task, Solution.criteria_list, previous_solutions)
-        self.score = judge.score_solution(Solution.task, self.solution)
-        self.rank = None
+    
+    def __init__(self, task: str, count: int, criteria_list: list, previous_solutions: list, metadata=None):
+        self.task=task
+        self.id=count
+        self.criteria_list=criteria_list
+        self.solution = generator.generate_solution(self.task, self.criteria_list, previous_solutions)
+        self.score = judge.score_solution(self.task, self.solution)
+        self.rank = count
         self.dump_solution()     
         
     def dump_solution(self):
@@ -60,10 +57,3 @@ class Solution:
     def find_rank(self, solution_list):
         """Return the 1-based rank of solution."""
         return solution_list.index(self) + 1      
-    
-    @classmethod
-    def add_criteria(cls, criteria: str):
-        """Adds crtieria to criteria list"""
-        cls.criteria_list.append(criteria)
-        print("Criteria added")
-        
