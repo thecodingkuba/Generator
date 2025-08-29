@@ -3,10 +3,7 @@ import json
 import os
 import src.models.generator as generator
 import src.models.judge as judge
-        
-        
-OUTPUT_FILE = "data/output/solutions.jsonl"
-
+         
 
 def save_input(input, output_file):
     """Append result to output file"""
@@ -27,11 +24,12 @@ class Solution:
         metadata (dict, optional): Additional metadata about the solution.
     """
     
-    def __init__(self, task: str, count: int, criteria_list: list, previous_solutions: list, metadata=None):
+    def __init__(self, task: str, count: int, research_dict: dict, criteria_list: list, previous_solutions: list, output_file, metadata=None):
         self.task=task
         self.id=count
+        self.research_dict=research_dict
         self.criteria_list=criteria_list
-        self.solution = generator.generate_solution(self.task, self.criteria_list, previous_solutions)
+        self.solution = generator.generate_solution(self.task, self.research_dict, self.criteria_list, previous_solutions, output_file)
         self.score = judge.score_solution(self.task, self.solution)
         self.rank = count
         self.dump_solution()     
@@ -43,12 +41,13 @@ class Solution:
             "score": self.score,
             "solution": self.solution
         }
-        save_input(data, OUTPUT_FILE)
+        save_input(data, self.output_file)
     
     def print_solution(self):
         """Prints solution to terminal."""
         data = {
             "id": self.id,
+            "task": self.task,
             "score": self.score,
             "solution": self.solution
         }

@@ -1,6 +1,8 @@
 """Main file that user runs to generate a solution for a given task."""
 import json
 import os
+from datetime import datetime
+import re 
 
 from src.models import researcher
 from src.models import judge
@@ -9,33 +11,47 @@ from src.solution import Solution
 from src.solution_list import SolutionList
 
 
-NUM_SOLUTIONS = 0
+NUM_SOLUTIONS = 2
 
+
+def create_session_base_filepath(task: str) -> str:
+    """Builds a valid filename based off the datetime and given task."""
+    task = task.lower()
+    task = re.sub(r'[^a-z0-9_]+', '_', task)
+    task = task.strip('_')
+    
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    
+    filename = f"{task}_{timestamp}.jsonl"
+    return filename
 
 def main():
     """Entry point where user inputs task and gets generated solution."""
     # ****SET TASK/PROBLEM****
-    solutions = SolutionList()
-    task = input("enter task/problem here\n")
-    solutions.task = task
+    task = input("Enter task/problem here:\n\n")
+    base_path = create_session_base_filepath(task)
+    solution_file = os.path.join("data", "output", "solutions", base_path)
+    solutions = SolutionList(task, solution_file)
+    
     
     # ****RESEARCH QUERIES****
+    research_file = os.path.join("data", "output", "research", base_path)
     deepresearch_queries = []
     while True:
-        query = input('enter a deep research query here, or type "quit" to continue to the next step\n')
+        query = input('Enter a deep research query here, or type "quit" to continue to the next step:\n\n')
         if query == "quit":
             break
         else:
             deepresearch_queries.append(query)
     if len(deepresearch_queries) > 0:
         print(f"generating {len(deepresearch_queries)} deep research reports now, it will take appromixately {5 * len(deepresearch_queries)} minutes")
-        researcher.process_queries(deepresearch_queries)
+        researcher.process_queries(deepresearch_queries, research_file, solutions)
         print("Research Queries Done Processing, now generating solutions...")
     else:
         print(f"No queries to process, now generating {NUM_SOLUTIONS} solutions...")
         
     # ****INITIAL SOLUTION GENERATION****
-    solutions.add_several_solutions(NUM_SOLUTIONS)
+    solutions.add_several_solutions(NUM_SOLUTIONS, solution_file)
     print("")
     print("Solution list will print now:")
     solutions.print_list()
@@ -65,7 +81,7 @@ def main():
                             break
                         try:
                             solutions.kill_solution(int(user_input) - 1)
-                        except:
+                        except (ValueError, IndexError):
                             print("\nERROR: This is not a valid rank to mark as bad.")
                 case 2:
                     while True:
@@ -94,7 +110,7 @@ def main():
                        
                         print("\nYou have found your solution:\n")
                         solution.print_solution()
-                        break
+                        return
                     except (ValueError, IndexError):
                         print("\nERROR: Not a valid rank.")
                 case 5:
@@ -110,8 +126,6 @@ def main():
         except ValueError:
             print(f"\nERROR: Invalid input. Please enter a valid number.")
             continue
-        except IndexError:
-            print(f"\nERROR: Invalid input. Please enter a number within range.")
         
         
 if __name__ == "__main__":

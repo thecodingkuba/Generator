@@ -50,9 +50,18 @@ def generate_previous_solutions_section(previous_solutions: list) -> str:
     return section
 
 
-def generate_research_section() -> str:
+def generate_research_string(research_dict: dict) -> str:
+    """"Builds context for LLM prompt by using output file as reference."""
+    lines = [
+        f"Query {index + 1}: {query}\nResult: {report}\n" 
+        for index, (query, report) in enumerate(research_dict.items())
+    ]
+    return "".join(lines)
+    
+    
+def generate_research_section(research_dict: dict) -> str:
     """Generates research section context string for LLM prompt."""
-    research_string = researcher.generate_research_string()
+    research_string = generate_research_string(research_dict)
     if not research_string:
         return ""
     
@@ -77,9 +86,9 @@ def generate_criteria_section(criteria_list: list) -> str:
     )
     return section
 
-def generate_solution(task: str, criteria_list, previous_solutions=None) -> str:
+def generate_solution(task: str, research_dict, criteria_list, previous_solutions=None) -> str:
     """Generate solution to input task"""
-    research_section = generate_research_section()
+    research_section = generate_research_section(research_dict)
     previous_solutions_section = generate_previous_solutions_section(previous_solutions)
     criteria_section = generate_criteria_section(criteria_list)
     prompt = TEMPLATE.format(

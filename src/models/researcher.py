@@ -1,4 +1,4 @@
-"""Researcher LLM to do deepresearch tasks."""
+"""Researcher LLM to call deepresearch API and return/store data."""
 import json
 import os
 import sys
@@ -9,9 +9,8 @@ from pathlib import Path
 
 import httpx
 
+import src.solution_list
 
-# File paths
-OUTPUT_FILE = "data/output/research.jsonl"
 
 # API Setup
 BASE_URL = "https://aimpapi.midea.com/t-aigc/airc-deepresearch-sit/"
@@ -93,28 +92,16 @@ def save_input(query, result, output_file):
     with open(output_file, 'a', encoding='utf-8') as f:
         f.write(json.dumps(report_data, ensure_ascii=False) + '\n')
 
-        
-def generate_to_file(query, output_file):
-    """Generates report from query and saves to output file."""
-    save_input(query, call_model(query), output_file)
 
-
-def process_queries(deepresearch_queries: list) -> None:
+def process_queries(deepresearch_queries: list, output_file: str, solution_list: "SolutionList") -> None:
     """Process user list of deepresearch queries, and send to output file."""
     for index, query in enumerate(deepresearch_queries):
-        generate_to_file(query, OUTPUT_FILE)
+        report = call_model(query)
+        save_input(query, report, output_file)
+        solution_list.add_research_report(query, report)
         print(f"Report {index + 1} generated")
 
 
-def generate_research_string(output_file=OUTPUT_FILE) -> str:
-    """"Builds context for LLM prompt by using output file as reference."""
-    result_string = ""
-    with open(output_file, "r", encoding="utf-8") as f:
-        for index, line in enumerate(f):
-            report = json.loads(line)
-            result_string += f"Query {index + 1}: {report['query']}\nResult: {report['report']}\n\n"
-    return result_string
-    
 def main():
     """Test API with simple model call"""
     prompt = "what is a good app that can track my goals in a to do list format"
