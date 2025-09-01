@@ -25,10 +25,12 @@ def create_session_base_filepath(task: str) -> str:
     filename = f"{task}_{timestamp}.jsonl"
     return filename
 
+
 def main():
     """Entry point where user inputs task and gets generated solution."""
     # ****SET TASK/PROBLEM****
-    task = input("Enter task/problem here:\n\n")
+    task = input("Enter task/problem here:\n")
+    print("")
     base_path = create_session_base_filepath(task)
     solution_file = os.path.join("data", "output", "solutions", base_path)
     solutions = SolutionList(task, solution_file)
@@ -38,20 +40,22 @@ def main():
     research_file = os.path.join("data", "output", "research", base_path)
     deepresearch_queries = []
     while True:
-        query = input('Enter a deep research query here, or type "quit" to continue to the next step:\n\n')
+        query = input('Enter a deep research query here, or type "quit" to continue to the next step:\n')
         if query == "quit":
+            print("")
             break
         else:
+            print("")
             deepresearch_queries.append(query)
     if len(deepresearch_queries) > 0:
-        print(f"generating {len(deepresearch_queries)} deep research reports now, it will take appromixately {5 * len(deepresearch_queries)} minutes")
+        print(f"Generating {len(deepresearch_queries)} deep research reports now, it will take appromixately {5 * len(deepresearch_queries)} minutes.")
         researcher.process_queries(deepresearch_queries, research_file, solutions)
-        print("Research Queries Done Processing, now generating solutions...")
+        print("Research Queries Done Processing!")
     else:
-        print(f"No queries to process, now generating {NUM_SOLUTIONS} solutions...")
+        print(f"No queries to process.")
         
     # ****INITIAL SOLUTION GENERATION****
-    solutions.add_several_solutions(NUM_SOLUTIONS, solution_file)
+    solutions.add_several_solutions(NUM_SOLUTIONS)
     print("")
     print("Solution list will print now:")
     solutions.print_list()

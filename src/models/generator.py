@@ -86,7 +86,8 @@ def generate_criteria_section(criteria_list: list) -> str:
     )
     return section
 
-def generate_solution(task: str, research_dict, criteria_list, previous_solutions=None) -> str:
+
+def generate_solution(task: str, research_dict, criteria_list, previous_solutions) -> str:
     """Generate solution to input task"""
     research_section = generate_research_section(research_dict)
     previous_solutions_section = generate_previous_solutions_section(previous_solutions)

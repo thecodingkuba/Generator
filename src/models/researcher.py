@@ -82,7 +82,7 @@ def call_model(query_text, thread_id=None):
         return None
     
     
-def save_input(query, result, output_file):
+def save_report(query, result, output_file):
     """Append result to output file"""
     report_data = {
         "query": query,
@@ -97,9 +97,9 @@ def process_queries(deepresearch_queries: list, output_file: str, solution_list:
     """Process user list of deepresearch queries, and send to output file."""
     for index, query in enumerate(deepresearch_queries):
         report = call_model(query)
-        save_input(query, report, output_file)
+        save_report(query, report, output_file)
         solution_list.add_research_report(query, report)
-        print(f"Report {index + 1} generated")
+        print(f"Report {index + 1} generated.")
 
 
 def main():

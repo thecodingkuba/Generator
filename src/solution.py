@@ -23,13 +23,13 @@ class Solution:
         score (float, optional): The score or rating for the solution.
         metadata (dict, optional): Additional metadata about the solution.
     """
-    
     def __init__(self, task: str, count: int, research_dict: dict, criteria_list: list, previous_solutions: list, output_file, metadata=None):
         self.task=task
         self.id=count
         self.research_dict=research_dict
         self.criteria_list=criteria_list
-        self.solution = generator.generate_solution(self.task, self.research_dict, self.criteria_list, previous_solutions, output_file)
+        self.output_file = output_file
+        self.solution = generator.generate_solution(self.task, self.research_dict, self.criteria_list, previous_solutions)
         self.score = judge.score_solution(self.task, self.solution)
         self.rank = count
         self.dump_solution()     

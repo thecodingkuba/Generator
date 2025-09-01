@@ -7,12 +7,13 @@ class SolutionList():
 
     def __init__(self, task, output_file):
         """Initializes solution list and dead solution list."""
+        self.task = task
+        self.counter = 0
+        self.output_file = output_file
         self.solution_list = []
         self.dead_list = []
         self.good_list = []
         self.previous_solutions = []
-        self.counter = 0
-        self.task = task
         self.criteria_list = []
         self.research_dict = {}
         
@@ -36,10 +37,10 @@ class SolutionList():
         self.solution_list.pop(solution_index)
         
     def mark_good(self, solution_index: int):
-        """Given index, adds solution to good list (keeps in main list)"""
+        """Given index, adds solution to good list (also keeping in main list)"""
         self.good_list.append(self.solution_list[solution_index])
         
-    def add_solution(self, solution: Solution):
+    def add_solution(self, solution: Solution) -> int:
         """"Inserts a given solution to the solution list in reverse sorted order. Returns index of new solution."""
         target = solution.score
         left_bound = 0
@@ -57,19 +58,19 @@ class SolutionList():
         self.solution_list.insert(left_bound, solution)
         return left_bound
 
-    def generate_and_add_solution(self, output_file):
-        """Generates a new solution and adds it to the solution list."""
-        new_solution = Solution(self.task, self.counter, self.research_dict, self.criteria_list, self.previous_solutions, output_file)
+    def generate_and_add_solution(self):
+        """Generates a new solution and adds it to the solution list and output file."""
+        new_solution = Solution(self.task, self.counter, self.research_dict, self.criteria_list, self.previous_solutions, self.output_file)
         self.add_solution(new_solution)
         self.previous_solutions.append(new_solution)
         self.counter += 1
         print("Solution Generated")
               
-    def add_several_solutions(self, num_solutions: int, output_file):
+    def add_several_solutions(self, num_solutions: int):
         """Generates and adds given number of solutions to solution list."""
         print(f"Generating {num_solutions} solutions...")
         for _ in range(num_solutions):
-            self.generate_and_add_solution(output_file)
+            self.generate_and_add_solution()
             
     def add_research_report(self, query: str, report: str) -> None:
         """Updates research library to have another report."""
