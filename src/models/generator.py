@@ -15,13 +15,15 @@ client = OpenAI (
         base_url = DEEPSEEK_BASE_URL,
         api_key = DEEPSEEK_API_KEY
     )
-    
+SYSTEM_PROMPT = "You are a solution generator expert, excelling at generating profitable and optimal solutions for an input task. Keep the solution around a paragraph in length."
+  
     
 def call_model(prompt: str, temperature=0.7, top_p=0.9, frequency_penalty=0.5, presence_penalty=0.3):
     """"Calls model with given prompt"""
     response = client.chat.completions.create(
         model="/model/Deepseek-V3",
         messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": prompt}
         ],
         temperature=temperature,

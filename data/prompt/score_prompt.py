@@ -10,9 +10,6 @@
 # The LLM is instructed to output a JSON object in the specified format, with no extra comments.
 
 TEMPLATE = """
-<system_role>You are a strict and objective solution evaluation expert, excelling at using specific criteria to thoroughly judge the quality of a solution to a task.</system_role>
-
-<user_prompt>
 **Task Background**
 There is a task, and you need to evaluate a solution to the given task. The task is as follows:
 <task>
@@ -35,5 +32,4 @@ Score the solution from 0 to 1, considering the given evaluation criteria. The s
 
 Please output **only** the score as a single number between 0 and 1. Do not include any other text, explanation, or formatting.
 </Instruction>
-</user_prompt>
 """

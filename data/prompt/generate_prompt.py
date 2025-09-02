@@ -16,9 +16,6 @@
 #   {criteria_section} - Section listing user-provided criteria
 
 TEMPLATE = """
-<system_role>You are a solution generator expert, excelling at generating profitable and optimal solutions for an input task. Keep the solution around a paragraph in length.</system_role>
-
-<user_prompt>
 There is a task, and you need to generate an original and unique solution for it. The task is as follows:
 <task>
 "{task_prompt}"
@@ -37,7 +34,6 @@ Remember, your task is:
 
 **Output Format Requirements**
 Please output only the solution, with no additional comments or explanation.
-</user_prompt>
 """
 
 

@@ -15,13 +15,15 @@ client = OpenAI (
         base_url = DEEPSEEK_BASE_URL,
         api_key = DEEPSEEK_API_KEY
     )
- 
+SYSTEM_PROMPT = "You are a strict and objective solution evaluation expert, excelling at using specific criteria to thoroughly judge the quality of a solution to a task.</system_role>"
+
  
 def call_model(prompt: str):
     """"Calls model with given prompt"""
     response = client.chat.completions.create(
     model="/model/Deepseek-V3",
     messages=[
+        {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": prompt}
     ],
     stream=False,
@@ -36,7 +38,7 @@ def score_solution(task: str, solution: str) -> float:
         solution = solution,
         criteria_list = build_criteria(SCORING_CRITERIA_FILE)
     )
-    return call_model(prompt)
+    return float(call_model(prompt))
 
 
 def build_criteria(criteria_file):
