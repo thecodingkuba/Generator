@@ -1,35 +1,41 @@
-# Template for scoring a solution to a given task using specific evaluation criteria.
-#
-# Usage:
-#   score_prompt.format(task_prompt="Describe a new way to recycle plastic.", criteria_list="...criteria...")
-#
-# Variables:
-#   {task_prompt}    - The task or problem statement being evaluated.
-#   {criteria_list}  - The list of evaluation criteria (as a string) to judge the solution.
-#
-# The LLM is instructed to output a JSON object in the specified format, with no extra comments.
-
 TEMPLATE = """
 **Task Background**
-There is a task, and you need to evaluate a solution to the given task. The task is as follows:
-<task>
+Given the following task, a proposed solution, and evaluation criteria, score each dimension and briefly justify your scores.
+
+<Task>
 {task_prompt}
-</task>
+</Task>
 
-**Evaluation Criteria**
-You will need to evaluate the solution based on the following evaluation criteria list. Each criteria includes an explanation, so understand carefully.
-The criteria list is as follows:
-<criteria_list>
-{criteria_list}
-</criteria_list>
-
-<Instruction>
-**Your Task**
-Score the solution from 0 to 1, considering the given evaluation criteria. The solution is as follows:
-<solution>
+<Solution>
 {solution}
-</solution>
+</Solution>
 
-Please output **only** the score as a single number between 0 and 1. Do not include any other text, explanation, or formatting.
-</Instruction>
+<EvaluationCriteria>
+{criteria_list}
+</EvaluationCriteria>
+
+Instructions:
+- For each criterion, analyze how the solution fulfills the requirements.
+- Score each criterion on a scale of 0–10 (continuous values).
+    * 0–2: Very poor performance.
+    * 2–4: Poor performance.
+    * 4–6: Average performance.
+    * 6–8: Good performance.
+    * 8–10: Excellent/outstanding performance.
+- Provide a brief, objective analysis for each criterion.
+- Output ONLY in the format below. Do not include any unrelated content, introduction, or summary.
+
+<output_format>
+{{
+    "criterion_name": [
+        {{
+            "criterion": "[Text of the evaluation criterion]",
+            "analysis": "[Brief analysis]",
+            "solution_score": [Continuous score 0–10]
+        }},
+        ...
+    ],
+    ...
+}}
+</output_format>
 """

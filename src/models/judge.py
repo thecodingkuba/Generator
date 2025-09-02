@@ -30,18 +30,8 @@ def call_model(prompt: str):
     )
     return response.choices[0].message.content
 
-    
-def score_solution(task: str, solution: str) -> float:
-    """Returns score (0 to 1) that represents input solution quality to input task."""
-    prompt = TEMPLATE.format(
-        task_prompt = task,
-        solution = solution,
-        criteria_list = build_criteria(SCORING_CRITERIA_FILE)
-    )
-    return float(call_model(prompt))
 
-
-def build_criteria(criteria_file):
+def build_criteria(criteria_file) -> str:
     """Builds criteria list into string format to feed into LLM prompt template string."""
     with open(criteria_file, "r") as f:
         criteria_list = json.load(f)
@@ -51,10 +41,33 @@ def build_criteria(criteria_file):
         return criteria_list_string
     
     
+def process_output(output: str) -> float:
+    """Turns judge output into an averaged float score."""
+    stripped_output = output.strip('`')
+    data = json.loads(stripped_output)
+    scores = []
+    for criterion in data.values():
+        for entry in criterion:
+            scores.append(entry["solution_score"])
+
+    average_score = sum(scores) / len(scores) if scores else 5
+    return average_score
+
+
+def score_solution(task: str, solution: str) -> float:
+    """Returns score (0 to 1) that represents input solution quality to input task."""
+    prompt = TEMPLATE.format(
+        task_prompt=task,
+        solution=solution,
+        criteria_list=build_criteria(SCORING_CRITERIA_FILE)
+    )
+    return process_output(call_model(prompt))
+
+    
 def main():
     """Test main that calls the model with a simple prompt"""
     task = "How do I make sushi?"
-    solution = "You need cucumbers, rice, and more ingredients. Steam and prepare the rice. Cut the other ingredients. Make it into a roll."
+    solution = "Steam and prepare the rice. Cut the other ingredients. Make it into a roll."
     print(score_solution(task, solution))
     
     

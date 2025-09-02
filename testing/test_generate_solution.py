@@ -91,5 +91,5 @@ if __name__ == "__main__":
     """
     Entry point for running the thorough input test.
     """
-    print("Running test_main_random_inputs()")
+    print("Running a thorough example.")
     test_thorough_input()
