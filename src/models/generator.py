@@ -6,9 +6,8 @@ import random
 import httpx
 from openai import OpenAI
 
-from data.prompt.generate_prompt import TEMPLATE, RESEARCH_TEMPLATE, PREVIOUS_SOLUTIONS_TEMPLATE, VERSION_TEMPLATE, CRITERIA_TEMPLATE
+from data.prompt.generate_prompt import TEMPLATE, RESEARCH_TEMPLATE, PREVIOUS_SOLUTIONS_TEMPLATE, GOOD_SOLUTIONS_TEMPLATE, BAD_SOLUTIONS_TEMPLATE, CRITERIA_TEMPLATE
 from src.models import researcher
-
 
 DEEPSEEK_API_KEY = "msk-68a74a8195300e232b449a651964efdf65ccc31f2a2e16e8f7994ae781337e01"
 DEEPSEEK_BASE_URL = "https://aimpapi.midea.com/t-aigc/aimp-deepseek-v3-0324/v1"
@@ -34,20 +33,6 @@ def call_model(prompt: str, temperature=0.7, top_p=0.9, frequency_penalty=0.5, p
     return response.choices[0].message.content
 
 
-def generate_previous_solutions_section(previous_solutions: list) -> str:
-    """"Generates a context string given list of previous solutions."""
-    if not previous_solutions:
-        return ""
-    
-    lines = [
-        f"Solution {index + 1}: {solution.solution}"
-        for index, solution in enumerate(previous_solutions)
-    ]
-    previous_solution_string = "\n".join(lines)
-    section = PREVIOUS_SOLUTIONS_TEMPLATE.format(
-        previous_solution_string=previous_solution_string
-    )
-    return section
 
 
 def generate_research_string(research_dict: dict) -> str:
@@ -71,6 +56,56 @@ def generate_research_section(research_dict: dict) -> str:
     return section
 
 
+def generate_previous_solutions_section(previous_solutions: list) -> str:
+    """"Generates a context string given list of previous solutions."""
+    if not previous_solutions:
+        return ""
+    
+    lines = [
+        f"Solution {index + 1}: {solution.solution}"
+        for index, solution in enumerate(previous_solutions)
+    ]
+    previous_solution_string = "\n".join(lines)
+    section = PREVIOUS_SOLUTIONS_TEMPLATE.format(
+        previous_solution_string=previous_solution_string
+    )
+    return section
+
+
+def generate_good_solutions_section(good_solutions: set) -> str:
+    """Generates good solution context string for LLM prompt."""
+    if not good_solutions:
+        return ""
+    
+    lines = {
+        f"Good solution: {solution.solution}"
+        for solution in good_solutions
+    }
+    good_solutions_string = "\n".join(lines)
+    
+    section = GOOD_SOLUTIONS_TEMPLATE.format(
+        good_solutions_string=good_solutions_string
+    )
+    return section
+
+
+def generate_bad_solutions_section(bad_solutions: set) -> str:
+    """Generates bad solution context string for LLM prompt."""
+    if not bad_solutions:
+        return ""
+    
+    lines = {
+        f"Bad solution: {solution.solution}"
+        for solution in bad_solutions
+    }
+    bad_solutions_string = "\n".join(lines)
+    
+    section = BAD_SOLUTIONS_TEMPLATE.format(
+        bad_solutions_string=bad_solutions_string
+    )
+    return section
+
+
 def generate_criteria_section(criteria_list: list) -> str:
     """Generatees criteria section string for LLM prompt"""
     if not criteria_list:
@@ -87,15 +122,19 @@ def generate_criteria_section(criteria_list: list) -> str:
     return section
 
 
-def generate_solution(task: str, research_dict, criteria_list, previous_solutions) -> str:
+def generate_solution(task: str, research_dict, previous_solutions, good_solutions, bad_solutions, criteria_list) -> str:
     """Generate solution to input task"""
     research_section = generate_research_section(research_dict)
     previous_solutions_section = generate_previous_solutions_section(previous_solutions)
+    good_solutions_section = generate_good_solutions_section(good_solutions)
+    bad_solutions_section = generate_bad_solutions_section(bad_solutions)
     criteria_section = generate_criteria_section(criteria_list)
     prompt = TEMPLATE.format(
         task_prompt=task,
         research_section=research_section,
         previous_solutions_section=previous_solutions_section,
+        good_solutions_section=good_solutions_section,
+        bad_solutions_section=bad_solutions_section,
         criteria_section=criteria_section
     )
     
@@ -114,16 +153,16 @@ def generate_solution(task: str, research_dict, criteria_list, previous_solution
     )
     
     
-def generate_versions(task: str, root_solution: str, num_versions=5) -> list:
-    """Takes a core solution and expands it to similar solutions"""
-    versions_list = []
-    prompt = VERSION_TEMPLATE.format(
-        task=task,
-        solution=root_solution
-    )
-    for _ in range(num_versions):
-        versions_list.append(call_model(prompt))
-    return versions_list
+# def generate_versions(task: str, root_solution: str, num_versions=5) -> list:
+#     """Takes a core solution and expands it to similar solutions"""
+#     versions_list = []
+#     prompt = VERSION_TEMPLATE.format(
+#         task=task,
+#         solution=root_solution
+#     )
+#     for _ in range(num_versions):
+#         versions_list.append(call_model(prompt))
+#     return versions_list
 
 
 def main():

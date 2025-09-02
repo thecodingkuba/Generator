@@ -23,15 +23,24 @@ class Solution:
         score (float, optional): The score or rating for the solution.
         metadata (dict, optional): Additional metadata about the solution.
     """
-    def __init__(self, task: str, count: int, research_dict: dict, criteria_list: list, previous_solutions: list, output_file, metadata=None):
+    def __init__(
+        self,
+        task: str,
+        count: int,
+        research_dict: dict,
+        previous_solutions: list,
+        good_solutions: list,
+        bad_solutions: list,
+        criteria_list: list,
+        output_file: str,
+    ):
         self.task=task
         self.id=count
-        self.research_dict=research_dict
-        self.criteria_list=criteria_list
         self.output_file = output_file
-        self.solution = generator.generate_solution(self.task, self.research_dict, self.criteria_list, previous_solutions)
+        self.solution = generator.generate_solution(self.task, research_dict, previous_solutions, good_solutions, bad_solutions, criteria_list)
         self.score = judge.score_solution(self.task, self.solution)
         self.rank = count
+        self.good = False
         self.dump_solution()     
         
     def dump_solution(self):
@@ -49,10 +58,23 @@ class Solution:
             "id": self.id,
             "task": self.task,
             "score": self.score,
-            "solution": self.solution
+            "solution": self.solution,
+            "marked_good": self.good
         }
         print(data)
               
     def find_rank(self, solution_list):
         """Return the 1-based rank of solution."""
-        return solution_list.index(self) + 1      
+        return solution_list.index(self) + 1
+    
+    def mark_good(self):
+        """Marks solution as good."""
+        self.good = True
+        
+    def __eq__(self, other):
+        if not isinstance(other, Solution):
+            return False
+        return self.task == other.task and self.solution == other.solution
+
+    def __hash__(self):
+        return hash((self.task, self.solution))

@@ -8,8 +8,7 @@ from openai import OpenAI
 
 from data.prompt.score_prompt import TEMPLATE
 
-
-CRITERIA_FILE = "data/input/criteria.json"
+SCORING_CRITERIA_FILE = "data/input/criteria.json"
 DEEPSEEK_API_KEY = "msk-68a74a8195300e232b449a651964efdf65ccc31f2a2e16e8f7994ae781337e01"
 DEEPSEEK_BASE_URL = "https://aimpapi.midea.com/t-aigc/aimp-deepseek-v3-0324/v1"
 client = OpenAI (
@@ -35,7 +34,7 @@ def score_solution(task: str, solution: str) -> float:
     prompt = TEMPLATE.format(
         task_prompt = task,
         solution = solution,
-        criteria_list = build_criteria(CRITERIA_FILE)
+        criteria_list = build_criteria(SCORING_CRITERIA_FILE)
     )
     return call_model(prompt)
 

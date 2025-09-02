@@ -4,41 +4,48 @@ from src.solution import Solution
 
 class SolutionList():
     """"Wraps a list to represent a collection of solution objects, ordered by score."""
-
     def __init__(self, task, output_file):
         """Initializes solution list and dead solution list."""
         self.task = task
-        self.counter = 0
+        self.counter = 1
         self.output_file = output_file
         self.solution_list = []
-        self.dead_list = []
-        self.good_list = []
+        self.bad_set = set()
+        self.good_set = set()
         self.previous_solutions = []
         self.criteria_list = []
         self.research_dict = {}
         
-    def print_list(self):
+    def print_solution_list(self):
         """Prints out solution list to terminal."""
-        rank_counter = 0
         for index, solution in enumerate(self.solution_list):
-            rank = index + 1
-            print(f"Rank {rank}: ")
+            print(f"Rank {index + 1}: ")
             solution.print_solution()
             print("")
+            
+    def print_criteria_list(self):
+        """Prints out criteria list to terminal."""
+        if not self.criteria_list:
+            print("No criteria yet.")
+        for index, criteria in enumerate(self.criteria_list):
+            print(f"Criteria {index + 1}:\n{criteria}")
             
     def add_criteria(self, criteria: str):
         """Adds input criteria to criteria list"""
         self.criteria_list.append(criteria)
         print("Criteria successfully added.")
         
-    def kill_solution(self, solution_index: int):
+    def mark_bad(self, solution_index: int):
         """Given index, removes solution from main list and puts into dead list."""
-        self.dead_list.append(self.solution_list[solution_index])
+        if self.solution_list[solution_index] in self.good_set:
+            raise ValueError
+        self.bad_set.add(self.solution_list[solution_index])
         self.solution_list.pop(solution_index)
         
     def mark_good(self, solution_index: int):
         """Given index, adds solution to good list (also keeping in main list)"""
-        self.good_list.append(self.solution_list[solution_index])
+        self.good_set.add(self.solution_list[solution_index])
+        self.solution_list[solution_index].mark_good()
         
     def add_solution(self, solution: Solution) -> int:
         """"Inserts a given solution to the solution list in reverse sorted order. Returns index of new solution."""
@@ -60,7 +67,7 @@ class SolutionList():
 
     def generate_and_add_solution(self):
         """Generates a new solution and adds it to the solution list and output file."""
-        new_solution = Solution(self.task, self.counter, self.research_dict, self.criteria_list, self.previous_solutions, self.output_file)
+        new_solution = Solution(self.task, self.counter, self.research_dict, self.previous_solutions, self.good_set, self.bad_set, self.criteria_list, self.output_file)
         self.add_solution(new_solution)
         self.previous_solutions.append(new_solution)
         self.counter += 1

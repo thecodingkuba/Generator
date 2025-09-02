@@ -10,7 +10,6 @@ from src.models import generator
 from src.solution import Solution
 from src.solution_list import SolutionList
 
-
 NUM_SOLUTIONS = 2
 
 
@@ -58,38 +57,35 @@ def main():
     solutions.add_several_solutions(NUM_SOLUTIONS)
     print("")
     print("Solution list will print now:")
-    solutions.print_list()
+    solutions.print_solution_list()
     
     # ****SOLUTION REFINEMENT****
     
     while True:
-        # TODO: FOR SURE Make it so a bad input does not crash everything
         print("""
         Choose from the following:
-          1. Mark solution(s) as bad (automatically removes them)
-          2. Mark solution(s) as good (to generate better soultions)
-          3. Generate more solutions
-          4. Select solution to forward (finish program)
-          5. Print solution list
-          6. Input new criteria for solution.
+          1. Print solution list
+          2. Generate more solutions
+          3. Mark solution(s) as good (to generate better soultions)
+          4. Mark solution(s) as bad (automatically removes them)
+          5. Input new criteria for solution
+          6. Print criteria list
+          7. Select solution to forward (finish program)
           """)
-        decision = input("Please input the number to select a route\n")
+        decision = input("Please input the number to select a route:\n")
         try:
             match int(decision):
                 case 1:
-                    while True:
-                        solutions.print_list()
-                        print("")
-                        user_input = input("please input the rank of the solution to mark bad, or type 'quit' to quit\n")
-                        if(user_input == "quit"):
-                            break
-                        try:
-                            solutions.kill_solution(int(user_input) - 1)
-                        except (ValueError, IndexError):
-                            print("\nERROR: This is not a valid rank to mark as bad.")
+                    solutions.print_solution_list()
                 case 2:
+                    try:
+                        num_add = int(input("Please input how many solutions to generate\n"))
+                        solutions.add_several_solutions(num_add)
+                    except ValueError:
+                        print("\nERROR: This is not a valid number")
+                case 3:
                     while True:
-                        solutions.print_list()
+                        solutions.print_solution_list()
                         print("")
                         user_input = input("Please input the rank of the solution to mark good, or type 'quit' to quit:\n")
                         if(user_input == "quit"):
@@ -98,15 +94,28 @@ def main():
                             solutions.mark_good(int(user_input) - 1)
                         except (ValueError, IndexError):
                             print("\nERROR: This is not a valid rank to mark as good.")
-                case 3:
-                    try:
-                        num_add = int(input("Please input how many solutions to generate\n"))
-                        solutions.add_several_solutions(num_add)
-                    except ValueError:
-                        print("\nERROR: This is not a valid number")
                 case 4:
+                    while True:
+                        solutions.print_solution_list()
+                        print("")
+                        user_input = input("Please input the rank of the solution to mark bad, or type 'quit' to quit\n")
+                        if(user_input == "quit"):
+                            break
+                        try:
+                            solutions.mark_bad(int(user_input) - 1)
+                        except (ValueError, IndexError):
+                            print("\nERROR: This is not a valid rank to mark as bad.")
+                case 5:
+                    while True:
+                        user_input = input("\nPlease enter your criteria, or type 'quit' to quit:\n")
+                        if(user_input == "quit"):
+                            break
+                        solutions.add_criteria(user_input)
+                case 6:
+                    solutions.print_criteria_list()
+                case 7:
                     try:
-                        solutions.print_list()
+                        solutions.print_solution_list()
                         print("")
                         index = (int(input("Please input what rank solution you would like to forward\n"))) - 1
                         
@@ -117,14 +126,6 @@ def main():
                         return
                     except (ValueError, IndexError):
                         print("\nERROR: Not a valid rank.")
-                case 5:
-                    solutions.print_list()
-                case 6:
-                    while True:
-                        user_input = input("\nPlease enter your criteria, or type 'quit' to quit:\n")
-                        if(user_input == "quit"):
-                            break
-                        solutions.add_criteria(user_input)
                 case _:
                     print(f"\nERROR: Invalid number. '{decision}' is not a listed option.")
         except ValueError:

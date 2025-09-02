@@ -11,7 +11,6 @@ import httpx
 
 import src.solution_list
 
-
 # API Setup
 BASE_URL = "https://aimpapi.midea.com/t-aigc/airc-deepresearch-sit/"
 AUTH_TOKEN = "msk-d60011d8a6905bd6b8d72cb77f847d978e387c253266a1dc5beb1c60f8fddf9b"
@@ -25,7 +24,8 @@ text_request_template = {
     "context": {}
 } 
         
-def call_model(query_text, thread_id=None):
+        
+def call_model(query_text, thread_id=None) -> str:
     """Call Midea API with the working configuration"""
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {AUTH_TOKEN}"}
     
@@ -82,7 +82,7 @@ def call_model(query_text, thread_id=None):
         return None
     
     
-def save_report(query, result, output_file):
+def save_report(query, result, output_file) -> None:
     """Append result to output file"""
     report_data = {
         "query": query,
@@ -106,6 +106,7 @@ def main():
     """Test API with simple model call"""
     prompt = "what is a good app that can track my goals in a to do list format"
     print(call_model(prompt))
+    
     
 if __name__ == "__main__":
     main()
