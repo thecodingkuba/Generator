@@ -21,7 +21,7 @@ class Solution:
         id (int): Unique identifier for the solution (based on generation order).
         text (str): The generated solution text.
         score (float, optional): The score or rating for the solution.
-        metadata (dict, optional): Additional metadata about the solution.
+        good (boolean): Whether the solution has been marked as good.
     """
     def __init__(
         self,
@@ -34,12 +34,12 @@ class Solution:
         criteria_list: list,
         output_file: str,
     ):
+        """Initializes a solution object."""
         self.task=task
         self.id=count
         self.output_file = output_file
-        self.solution = generator.generate_solution(self.task, research_dict, previous_solutions, good_solutions, bad_solutions, criteria_list)
-        self.score = judge.score_solution(self.task, self.solution)
-        self.rank = count
+        self.text = generator.generate_solution(self.task, research_dict, previous_solutions, good_solutions, bad_solutions, criteria_list)
+        self.score = judge.score_solution(self.task, self.text)
         self.good = False
         self.dump_solution()     
         
@@ -48,7 +48,8 @@ class Solution:
         data = {
             "id": self.id,
             "score": self.score,
-            "solution": self.solution
+            "solution": self.text,
+            "marked_good": self.good
         }
         save_input(data, self.output_file)
     
@@ -58,7 +59,7 @@ class Solution:
             "id": self.id,
             "task": self.task,
             "score": self.score,
-            "solution": self.solution,
+            "solution": self.text,
             "marked_good": self.good
         }
         print(data)
@@ -72,9 +73,11 @@ class Solution:
         self.good = True
         
     def __eq__(self, other):
+        """Check if two Solution objects are equal based on task and solution text."""
         if not isinstance(other, Solution):
             return False
-        return self.task == other.task and self.solution == other.solution
+        return self.task == other.task and self.text == other.text
 
     def __hash__(self):
-        return hash((self.task, self.solution))
+        """Return a hash value based on task and solution text."""
+        return hash((self.task, self.text))

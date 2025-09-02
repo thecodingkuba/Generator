@@ -33,8 +33,6 @@ def call_model(prompt: str, temperature=0.7, top_p=0.9, frequency_penalty=0.5, p
     return response.choices[0].message.content
 
 
-
-
 def generate_research_string(research_dict: dict) -> str:
     """"Builds context for LLM prompt by using output file as reference."""
     lines = [
@@ -62,7 +60,7 @@ def generate_previous_solutions_section(previous_solutions: list) -> str:
         return ""
     
     lines = [
-        f"Solution {index + 1}: {solution.solution}"
+        f"Solution {index + 1}: {solution.text}"
         for index, solution in enumerate(previous_solutions)
     ]
     previous_solution_string = "\n".join(lines)
@@ -78,7 +76,7 @@ def generate_good_solutions_section(good_solutions: set) -> str:
         return ""
     
     lines = {
-        f"Good solution: {solution.solution}"
+        f"Good solution: {solution.text}"
         for solution in good_solutions
     }
     good_solutions_string = "\n".join(lines)
@@ -95,7 +93,7 @@ def generate_bad_solutions_section(bad_solutions: set) -> str:
         return ""
     
     lines = {
-        f"Bad solution: {solution.solution}"
+        f"Bad solution: {solution.text}"
         for solution in bad_solutions
     }
     bad_solutions_string = "\n".join(lines)
