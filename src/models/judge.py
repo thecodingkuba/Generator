@@ -44,6 +44,8 @@ def build_criteria(criteria_file) -> str:
 def process_output(output: str) -> float:
     """Turns judge output into an averaged float score."""
     stripped_output = output.strip('`')
+    if stripped_output.startswith("json"):
+        stripped_output = stripped_output.strip()[4: ]
     data = json.loads(stripped_output)
     scores = []
     for criterion in data.values():

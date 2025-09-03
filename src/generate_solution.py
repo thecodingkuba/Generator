@@ -60,7 +60,6 @@ def main():
     solutions.print_solution_list()
     
     # ****SOLUTION REFINEMENT****
-    
     while True:
         print("""
         Choose from the following:
