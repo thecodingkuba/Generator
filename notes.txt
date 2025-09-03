@@ -1,0 +1,8 @@
+. The first approach builds specialised frameworks with fixed workflows and hardcoded reasoning, which work well for narrow tasks but lack flexibility. After deployment, such agents are
+static: they neither incorporate online information nor adapt to novel situations. T
+
+
+ Differently, non-parametric approaches freeze the LLM
+and attach an external memory to optimise the prompt construction process. Human intelligence relies
+heavily on memory systems,
+
