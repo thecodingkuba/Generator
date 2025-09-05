@@ -5,7 +5,7 @@
             "name": "Python: Debug Solution",
             "type": "debugpy",
             "request": "launch",
-            "module": "testing.comparative_test",
+            "module": "src.generate_solution",
             "console": "integratedTerminal"
         }
     ]
