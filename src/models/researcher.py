@@ -93,7 +93,7 @@ def save_report(query, result, output_file) -> None:
         f.write(json.dumps(report_data, ensure_ascii=False) + '\n')
 
 
-def process_queries(deepresearch_queries: list, output_file: str, solution_list: src.SolutionList) -> None:
+def process_queries(deepresearch_queries: list, output_file: str, solution_list: "src.SolutionList") -> None:
     """Process user list of deepresearch queries, and send to output file."""
     for index, query in enumerate(deepresearch_queries):
         report = call_model(query)
